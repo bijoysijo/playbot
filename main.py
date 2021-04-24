@@ -1,10 +1,19 @@
 import discord
 import os
 from dotenv import load_dotenv
+import requests
+import json
 
 load_dotenv()
 
 client = discord.Client()
+
+def get_quote():
+  response = requests.get("https://zenquotes.io/api/random")
+  json_data = json.loads(response.text)
+  quote = json_data[0]['q'] + " -" + json_data[0]['a']
+  return(quote)
+
 
 @client.event
 async def on_ready():
@@ -16,8 +25,11 @@ async def on_message(message):
     return
   if message.content.startswith('$hello'):
     await message.channel.send('Hello!')
+  if message.content.startswith('$inspire'):
+    quote = get_quote()
+    await message.channel.send(quote)
 
-print(os.getenv('TOKEN', 'Token not found'))
-# client.run('ODM1NDc4MDM0Nzg5Njk1NDk5.YIQBjQ.X9tKDh6Nvt8X3QRZZ8tZzxOU1rc')
+client.run(os.getenv('TOKEN', 'Token not found'))
+
 
 
