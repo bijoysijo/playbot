@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 "discord.py" = "*"
-python-dotenv = "*"
+python-dotenv = {extras = ["cli"], version = "*"}
 requests = "*"
 deta = "*"
 
