@@ -11,7 +11,6 @@ load_dotenv()
 
 #deta base
 deta = Deta(os.getenv('DETA_PROJECT_KEY'))
-deta.Base("encouragements")
 
 #method to return db
 def getdb(name):
@@ -43,14 +42,18 @@ def update_encouragements_table(encouraging_message):
 #delete user requested encouraging message from db
 def delete_from_encouragements_table(index):
   db = getdb("encouragements")
-  encouragements_list = db.get("encouragements")["cheerios"]
-  if index in encouragements_list:
-    encouragements_list.remove(index)
-    db.delete("encouragements")
-    db.put({"cheerios": encouragements_list}, "encouragements")
-    return encouragements_list
+  if db.get("encouragements")["cheerios"]:
+    encouragements_list = db.get("encouragements")["cheerios"]
+    if index in encouragements_list:
+      encouragements_list.remove(index)
+      db.delete("encouragements")
+      db.put({"cheerios": encouragements_list}, "encouragements")
+      print(db.get("encouragements")["cheerios"])
+      return encouragements_list
+    else:
+      return "Item not in list"
   else:
-    return "Item not in list"
+    return "List is empty, please add to list"
 
 #intializer event
 @client.event
